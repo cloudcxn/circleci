@@ -4,16 +4,11 @@ version: 2.1
 # Usar un paquete de configuración llamado orb.
 orbs:
   # Declarar una dependencia en la welcome-orb
-  bienvenida: circleci/node@1.1
+  bienvenida: circleci/welcome-orb@0.4.1
 # Orquestar o programar un grupo de trabajos
-jobs:
-  construir:
-    executor:
-      name: node/default
-      tag: '10.4'
-    steps:
-      - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
-      - run: npm run test
+workflows:
+  # Llamar el flujo de trabajo "bienvenida"
+  bienvenida:
+    # Ejecutar la bienvenida/ejecutar el trabajo en su propio contenedor
+    jobs:
+      - bienvenida/run
