@@ -1,2 +1,2 @@
-# circleci
-CircleCI configurations
+# Circle CI
+Configuraciones de Circle CI.
