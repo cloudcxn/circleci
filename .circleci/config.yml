@@ -1,0 +1,14 @@
+# Usar la última versión 2.1 del motor de proceso de flujo CircleCI.
+# Ver: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+# Usar un paquete de configuración llamado orb.
+orbs:
+  # Declarar una dependencia en la welcome-orb
+  bienvenida: circleci/welcome-orb@0.4.1
+# Orquestar o programar un grupo de trabajos
+workflows:
+  # Llamar el flujo de trabajo "bienvenida"
+  bienvenida:
+    # Ejecutar la bienvenida/ejecutar el trabajo en su propio contenedor
+    jobs:
+      - bienvenida/run
