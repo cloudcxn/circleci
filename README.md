@@ -1,7 +1,7 @@
 # Circle CI
 [![CircleCI](https://circleci.com/gh/cloudcxn/circleci/tree/principal.svg?style=svg)](https://circleci.com/gh/cloudcxn/circleci/tree/principal)
 
-Configuraciones de Circle CI.
+Configuración de ejemplo de CircleCI para integración continua.
 
 Este repositorio sigue el documento [Getting Started][getting-started] de
 Circle CI que aplica el [orb de bienvenida][welcome-orb]. Ver la [Referencia
