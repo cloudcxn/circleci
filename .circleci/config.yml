@@ -17,7 +17,13 @@ jobs: # Añadir dos trabajos, para que un flujo de trabajo los coordine.
     steps:
       - checkout # Obtener el código desde GitHub.
       - run: echo "Primer Hola" # Imprimir "Primer Hola" a la salida estándar.
-      - run: sleep 5 # Comando para "dormir" al trabajo por 5 segundos.
+      - run: mkdir -p mi-espacio/de-trabajo
+      - run: echo "Prueba de espacios de trabajo" > mi-espacio/de-trabajo/salida_echo.txt
+      - persist_to_workspace:
+          # Debe ser ruta absoluta, o relativa al directorio de trabajo.
+          root: mi-espacio/
+          paths: # Debe ser relativa a la ruta de raíz.
+            - de-trabajo/
   segundo: # Llamar al trabajo "segundo".
     docker:
       - image: circleci/ruby:2.4.1
@@ -27,23 +33,34 @@ jobs: # Añadir dos trabajos, para que un flujo de trabajo los coordine.
     steps:
       - checkout
       - run: echo "Segundo Hola"
-      - run: sleep 6
+      - attach_workspace:
+          # Debe ser una ruta absoluta, o relativa al directorio de trabajo.
+          at: mi-espacio
+      - run: |
+          if [[ $(cat mi-espacio/de-trabajo/salida_echo.txt) == "Prueba de espacios de trabajo" ]]; then
+            echo "Espacio de trabajo validado";
+          else
+            echo "El espacio de trabajo no pudo ser validado"; exit 1
+          fi
 
 orbs: # Usar un paquete de configuración llamado orb.
-  # Declarar una dependencia en la welcome-orb
+  # Declarar una dependencia en la welcome-orb.
   bienvenida: circleci/welcome-orb@0.4.1
 
 # Orquestar o programar un grupo de trabajos.
 # Bajo el workflows: mapeo, se puede coordinar los dos trabajos y el orb
-# definidos previamente
+# definidos previamente.
 workflows:
   version: 2
-  flujo-orb: # Llamar el flujo de trabajo "flujo-orb"
-    # Ejecutar el trabajo bienvenida/run en su propio contenedor
+  flujo-orb: # Llamar el flujo de trabajo "flujo-orb".
+    # Ejecutar el trabajo bienvenida/run en su propio contenedor.
     jobs:
       - bienvenida/run
-  # Llamar el flujo de trabajo "flujo-docker"
+
+  # Llamar el flujo de trabajo "flujo-docker".
   flujo-docker:
     jobs: # Ejecutar los trabajos enlistados.
       - primero
-      - segundo
+      - segundo:
+          requires:
+            - primero
