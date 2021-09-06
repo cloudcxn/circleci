@@ -1,14 +1,49 @@
 # Usar la última versión 2.1 del motor de proceso de flujo CircleCI.
 # Ver: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-# Usar un paquete de configuración llamado orb.
-orbs:
+
+jobs: # Añadir dos trabajos, para que un flujo de trabajo los coordine.
+  primero: # Llamar al trabajo "primero".
+    docker: # Ejecutar con Docker.
+      # Especificar la imagen de Docker para Ruby 2.4.1 provista por CircleCI.
+      - image: circleci/ruby:2.4.1
+        auth:
+          username: mydockerhub-user
+          # Referencias de variables de entorno, contexto, interfaz de usuario
+          # del proyecto.
+          password: $DOCKERHUB_PASSWORD
+    # Los pasos son una lista de comandos para ejecutar dentro del contenedor
+    # de Docker definido previamente.
+    steps:
+      - checkout # Obtener el código desde GitHub.
+      - run: echo "Primer Hola" # Imprimir "Primer Hola" a la salida estándar.
+      - run: sleep 5 # Comando para "dormir" al trabajo por 5 segundos.
+  segundo: # Llamar al trabajo "segundo".
+    docker:
+      - image: circleci/ruby:2.4.1
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - run: echo "Segundo Hola"
+      - run: sleep 6
+
+orbs: # Usar un paquete de configuración llamado orb.
   # Declarar una dependencia en la welcome-orb
   bienvenida: circleci/welcome-orb@0.4.1
-# Orquestar o programar un grupo de trabajos
+
+# Orquestar o programar un grupo de trabajos.
+# Bajo el workflows: mapeo, se puede coordinar los dos trabajos y el orb
+# definidos previamente
 workflows:
-  # Llamar el flujo de trabajo "bienvenida"
-  bienvenida:
-    # Ejecutar la bienvenida/ejecutar el trabajo en su propio contenedor
+  version: 2
+  flujo-orb: # Llamar el flujo de trabajo "flujo-orb"
+    # Ejecutar el trabajo bienvenida/run en su propio contenedor
     jobs:
       - bienvenida/run
+  # Llamar el flujo de trabajo "flujo-docker"
+  flujo-docker:
+    jobs: # Ejecutar los trabajos enlistados.
+      - primero
+      - segundo
