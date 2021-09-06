@@ -9,11 +9,14 @@ Circle CI que aplica el [orb de bienvenida][welcome-orb].
   pasos que pueden ser usados en el archivo [config.yml](.circleci/config.yml).
 * Ver las [aplicaciones demostrativas][demos] para configurar CircleCI con
   varios lenguajes y marcos de desarrollo.
-* Ver [orquestación][orchestrating-workflows] para más detalles con los flujos
-  de trabajo.
+* Ver la [orquestación][orchestrating-workflows] para más detalles con los
+  flujos de trabajo.
+* Ver los [espacios de trabajo][workspaces] para pasar datos únicos a cada
+  ejecución y que son necesarios para trabajos subsecuentes.
 
 [configuration-reference]: https://circleci.com/docs/2.0/configuration-reference
 [demos]: https://circleci.com/docs/2.0/demo-apps/
 [getting-started]: https://circleci.com/docs/2.0/getting-started/
 [orchestrating-workflows]: https://circleci.com/docs/2.0/workflows/#overview
-[welcome-orb]:https://circleci.com/developer/orbs/orb/circleci/welcome-orb
+[welcome-orb]: https://circleci.com/developer/orbs/orb/circleci/welcome-orb
+[workspaces]: https://circleci.com/docs/2.0/workflows/#using-workspaces-to-share-data-among-jobs
